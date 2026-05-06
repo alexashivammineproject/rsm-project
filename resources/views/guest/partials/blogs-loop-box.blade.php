@@ -35,6 +35,6 @@
 		</div>
 	</div>
 @endforeach
-{{ $blogs->links() }}
+{{ $blogs->links('vendor.pagination.bootstrap-4') }}
                     
                         

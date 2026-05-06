@@ -20,8 +20,13 @@
 					</div>
 				</div>
 			@endforeach
-			{{ $blogs->links() }}
-                
+           </div>
+           
+           <!-- Pagination -->
+           <div class="row">
+               <div class="col-12">
+                   {{ $blogs->links('vendor.pagination.bootstrap-4') }}
+               </div>
            </div>
         </div>
     </section>
