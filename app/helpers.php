@@ -47,16 +47,21 @@ if (!function_exists('safe_storage_put_file')) {
             $path = $directory . '/' . $filename;
             
             // Get storage path
-            $storagePath = storage_path('app/public/' . $path);
+            $storagePath = storage_path('app/public/' . $directory);
             
             // Create directory if it doesn't exist
-            $dir = dirname($storagePath);
-            if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
+            if (!is_dir($storagePath)) {
+                mkdir($storagePath, 0755, true);
             }
             
-            // Move uploaded file
-            if ($file->move(dirname($storagePath), basename($storagePath))) {
+            // Get the temporary file path
+            $tmpPath = $file->getRealPath();
+            $destinationPath = $storagePath . '/' . $filename;
+            
+            // Copy file directly without using Storage facade
+            if (copy($tmpPath, $destinationPath)) {
+                // Set proper permissions
+                chmod($destinationPath, 0644);
                 return $path;
             }
             
