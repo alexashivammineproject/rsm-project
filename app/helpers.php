@@ -39,6 +39,12 @@ if (!function_exists('safe_storage_put_file')) {
     function safe_storage_put_file($directory, $file)
     {
         try {
+            // Validate file
+            if (!$file || !$file->isValid()) {
+                \Log::error('safe_storage_put_file: Invalid file uploaded');
+                return false;
+            }
+            
             // Generate unique filename
             $extension = $file->getClientOriginalExtension();
             $filename = uniqid() . '_' . time() . '.' . $extension;
@@ -51,23 +57,32 @@ if (!function_exists('safe_storage_put_file')) {
             
             // Create directory if it doesn't exist
             if (!is_dir($storagePath)) {
-                mkdir($storagePath, 0755, true);
+                if (!mkdir($storagePath, 0755, true)) {
+                    \Log::error('safe_storage_put_file: Failed to create directory: ' . $storagePath);
+                    return false;
+                }
             }
             
             // Get the temporary file path
             $tmpPath = $file->getRealPath();
             $destinationPath = $storagePath . '/' . $filename;
             
+            // Log for debugging
+            \Log::info('safe_storage_put_file: Copying from ' . $tmpPath . ' to ' . $destinationPath);
+            
             // Copy file directly without using Storage facade
             if (copy($tmpPath, $destinationPath)) {
                 // Set proper permissions
                 chmod($destinationPath, 0644);
+                \Log::info('safe_storage_put_file: File uploaded successfully: ' . $path);
                 return $path;
+            } else {
+                \Log::error('safe_storage_put_file: Failed to copy file');
+                return false;
             }
-            
-            return false;
         } catch (\Exception $e) {
             \Log::error('safe_storage_put_file error: ' . $e->getMessage());
+            \Log::error('safe_storage_put_file trace: ' . $e->getTraceAsString());
             return false;
         }
     }

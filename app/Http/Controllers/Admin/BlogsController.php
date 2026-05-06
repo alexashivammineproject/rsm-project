@@ -254,18 +254,23 @@ class BlogsController extends Controller
 
         // Store File & Get Path - Use safe method without fileinfo
         if ($request->hasFile('image')) {
+            \Log::info('Blog update: Image file detected');
             $imagePath = safe_storage_put_file('images', $request->file('image'));
             
             if ($imagePath) {
+                \Log::info('Blog update: Image uploaded successfully: ' . $imagePath);
                 // Delete Old Image
                 $oldImagePath = storage_path('app/public/' . $blog->image);
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
+                    \Log::info('Blog update: Old image deleted: ' . $oldImagePath);
                 }
             } else {
+                \Log::error('Blog update: Image upload failed, keeping old image');
                 $imagePath = $blog->image;
             }
         } else {
+            \Log::info('Blog update: No new image uploaded');
             $imagePath = $blog->image;
         }
 
