@@ -55,6 +55,7 @@
                             <li><a class="nav-link" href="{{ route('users.index') }}">Users</a></li>
                             <li><a class="nav-link" href="{{ route('settings.index') }}">Settings</a></li>
                             <li><a class="nav-link" href="{{ route('email-recipients.index') }}">Email Recipients</a></li>
+                            <li><a class="nav-link" href="{{ route('crm-settings.index') }}">CRM Integration</a></li>
                             <li><a class="nav-link" href="{{ route('subscribers.index') }}">Subscribers</a></li>
                             <li><a class="nav-link" href="{{ route('enquiry.index') }}">Enquiries</a></li>
 

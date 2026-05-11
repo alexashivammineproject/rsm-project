@@ -174,6 +174,11 @@ Route::prefix('admin')->group(function () {
     Route::delete('email-recipients/{id}', 'Admin\EmailRecipientsController@destroy')->name('email-recipients.destroy');
     Route::get('email-recipients/{id}/toggle', 'Admin\EmailRecipientsController@toggleStatus')->name('email-recipients.toggle');
     
+    // CRM Integration Settings
+    Route::get('crm-settings', 'Admin\CrmSettingsController@index')->name('crm-settings.index');
+    Route::put('crm-settings', 'Admin\CrmSettingsController@update')->name('crm-settings.update');
+    Route::get('crm-settings/test', 'Admin\CrmSettingsController@test')->name('crm-settings.test');
+    
     // Email Logs - View email send history
     Route::get('email-logs', 'Admin\EnqueryController@index')->name('email-logs.index')->middleware('role:manage_settings');
 });

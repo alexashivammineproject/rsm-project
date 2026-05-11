@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Jobs\SendSubscriptionVerificationEmail;
 use App\Jobs\SendEnquiryEmail;
 use App\Listeners\EmailSubscribedListener;
+use App\CrmSetting;
 use DB;
 use Mail;
 use Illuminate\Support\Facades\Input;
@@ -161,6 +162,15 @@ class HomeController extends Controller
             // Automatic Send Email for confirmation
             event(new EmailSubscribedListener($subscriber));
             SendSubscriptionVerificationEmail::dispatch($subscriber);
+            
+            // Send to CRM
+            CrmSetting::sendLead([
+                'email' => $request->email,
+                'source' => 'Newsletter Subscription',
+                'name' => 'Newsletter Subscriber',
+                'message' => 'Subscribed to newsletter',
+            ]);
+            
             // Return Success Message
             return response()->json('Check Your Email Inbox for confirmation', 200);
         }
@@ -359,6 +369,16 @@ class HomeController extends Controller
                     @mail($to, $subject, $message, $headers);
                     
                     \Log::info('Contact form submitted', ['to' => $to, 'from' => $request->email]);
+                    
+                    // Send to CRM
+                    CrmSetting::sendLead([
+                        'name' => $request->name . ' ' . ($request->last_name ?? ''),
+                        'email' => $request->email,
+                        'phone' => $request->countryCode . ' ' . $request->phone,
+                        'message' => $request->message,
+                        'source' => 'Contact Form',
+                        'country_code' => $request->countryCode,
+                    ]);
             
                     return redirect()->route('thank-you');     
                         
@@ -425,6 +445,17 @@ class HomeController extends Controller
             @mail($to, $subject, $message, $headers);
             
             \Log::info('Enquiry submitted', ['to' => $to, 'from' => $request->email, 'product' => $request->product]);
+            
+            // Send to CRM
+            CrmSetting::sendLead([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->countryCode . ' ' . $request->phone,
+                'message' => $request->message,
+                'product' => $request->product,
+                'source' => 'Enquiry Modal',
+                'country_code' => $request->countryCode,
+            ]);
             
 			echo 'true';
 		}else{
