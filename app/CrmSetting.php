@@ -40,16 +40,31 @@ class CrmSetting extends Model
         }
 
         try {
+            // Prepare data with API key
+            $postData = array_merge($data, [
+                'api_key' => $settings->api_key
+            ]);
+            
+            // Ensure required fields
+            if (!isset($postData['name'])) {
+                $postData['name'] = 'Unknown';
+            }
+            if (!isset($postData['phone'])) {
+                $postData['phone'] = '';
+            }
+            
             $ch = curl_init();
             
             curl_setopt($ch, CURLOPT_URL, $settings->api_url);
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array_merge($data, [
-                'api_key' => $settings->api_key
-            ])));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 30);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+                'Accept: application/json'
+            ]);
             
             $response = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -65,7 +80,7 @@ class CrmSetting extends Model
             \Log::info('CRM API Response', [
                 'http_code' => $httpCode,
                 'response' => $response,
-                'data' => $data
+                'sent_data' => $postData
             ]);
             
             return $httpCode >= 200 && $httpCode < 300;
