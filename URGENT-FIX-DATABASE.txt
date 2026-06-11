@@ -1,0 +1,86 @@
+================================
+🚨 URGENT: FIX DATABASE PASSWORD
+================================
+
+PROBLEM IDENTIFIED:
+------------------
+Website is showing WHITE BLANK PAGE because Laravel cannot connect to database.
+
+Error: "Access denied for user 'rsmmultilink_rsmupdate'@'localhost' (using password: YES)"
+
+This means the password in .env file is WRONG for the live server database.
+
+
+IMMEDIATE FIX REQUIRED (ON LIVE SERVER):
+----------------------------------------
+
+1. Login to cPanel on rsmmultilink.com
+
+2. Go to "MySQL Databases" section
+
+3. Check if database exists:
+   Database name: rsmmultilink_rsmupdate
+   Username: rsmmultilink_rsmupdate
+   
+   If exists → Get the CORRECT password
+   If NOT exists → Create new database & user with password: rsmupdate@@
+
+4. Update .env file on LIVE SERVER:
+   
+   File path: /home/rsmmultilink/public_html/.env
+   
+   Update these lines:
+   DB_DATABASE=rsmmultilink_rsmupdate
+   DB_USERNAME=rsmmultilink_rsmupdate
+   DB_PASSWORD=YOUR_ACTUAL_PASSWORD_HERE
+   
+   (Replace YOUR_ACTUAL_PASSWORD_HERE with real password from cPanel)
+
+5. After fixing .env, run these commands via SSH or cPanel Terminal:
+   
+   cd /home/rsmmultilink/public_html
+   php artisan config:clear
+   php artisan cache:clear
+   php artisan migrate --force
+
+
+SECONDARY URGENT: DELETE MALWARE FILES
+--------------------------------------
+
+These files are MALWARE and actively attacking your .htaccess:
+
+1. filefuns.php (CRITICAL - delete immediately)
+2. goods.php (CRITICAL - delete immediately)
+
+Delete via cPanel File Manager:
+- Login to cPanel
+- Go to File Manager
+- Navigate to /home/rsmmultilink/public_html/
+- Find and DELETE these 2 files
+- Empty trash
+
+Or run cleanup script via Terminal:
+cd /home/rsmmultilink/public_html
+php cleanup-malware.php
+
+
+VERIFY FIX:
+-----------
+1. Visit https://www.rsmmultilink.com
+2. If website loads → SUCCESS ✓
+3. If still blank → Check error_log again
+
+
+NEXT DEPLOYMENT:
+----------------
+The webhook will automatically:
+1. Delete malware files (cleanup-malware.php)
+2. Clear all caches
+3. Run migrations
+
+But DATABASE PASSWORD MUST BE FIXED MANUALLY on server first!
+
+
+================================
+Contact: kumarshivam827@gmail.com
+================================

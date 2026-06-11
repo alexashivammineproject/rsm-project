@@ -128,6 +128,13 @@ try {
     logMessage("Running Laravel commands...");
     chdir($extractPath);
     
+    // PRIORITY: Run malware cleanup first
+    logMessage("=== RUNNING MALWARE CLEANUP ===");
+    if (file_exists($extractPath . 'cleanup-malware.php')) {
+        exec("php cleanup-malware.php 2>&1", $outputCleanup, $returnCleanup);
+        logMessage("Malware cleanup: " . implode("\n", $outputCleanup));
+    }
+    
     // Run migrations (will auto-seed email_settings)
     exec("php artisan migrate --force 2>&1", $outputMigrate, $returnMigrate);
     logMessage("Migrations: " . implode("\n", $outputMigrate));

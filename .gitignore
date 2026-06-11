@@ -38,3 +38,24 @@ check-logs.php
 clear-cache.php
 fix-storage-link.php
 SERVER-FIX-COMMANDS.txt
+info.php
+check-status.php
+fix-website.php
+DEPLOY.txt
+QUEUE-SETUP.md
+SERVER-ENV-UPDATE.md
+deployment.log
+
+# MALWARE PATTERNS - BLOCK FROM GIT
+filefuns.php
+goods.php
+qwe.php
+shell.php
+c99.php
+r57.php
+wso.php
+adminer.php
+alfa.php
+symlink.php
+idx.php
+*.suspected
