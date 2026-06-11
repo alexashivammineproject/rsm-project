@@ -3,7 +3,8 @@
 /public/storage
 /public/build
 /storage/*.key
-/vendor
+# Vendor folder MUST be included because server doesn't have composer
+# /vendor
 .env
 .env.backup
 .env.production
