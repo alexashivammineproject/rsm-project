@@ -31,5 +31,8 @@ vite.config.zip
 # Webhook config (contains sensitive token)
 webhook-config.php
 
-# SMTP test script
+# Temporary test scripts (not check-status.php - needed for diagnostics)
 test-smtp.php
+check-logs.php
+clear-cache.php
+fix-storage-link.php
