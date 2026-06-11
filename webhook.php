@@ -84,38 +84,24 @@ try {
     $extractedFolder = $extractPath . "rsm-project-main/";
     
     if (is_dir($extractedFolder)) {
-        $files = glob($extractedFolder . "*");
-        foreach ($files as $file) {
-            $dest = $extractPath . basename($file);
-            
-            // Skip if destination exists and is a directory
-            if (is_dir($dest) && is_dir($file)) {
-                // Recursively copy directory contents
-                $iterator = new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($file, RecursiveDirectoryIterator::SKIP_DOTS),
-                    RecursiveIteratorIterator::SELF_FIRST
-                );
-                
-                foreach ($iterator as $item) {
-                    $destPath = $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName();
-                    if ($item->isDir()) {
-                        @mkdir($destPath, 0755, true);
-                    } else {
-                        @copy($item, $destPath);
-                    }
-                }
-            } else {
-                // Move/replace file
-                if (file_exists($dest)) {
-                    unlink($dest);
-                }
-                rename($file, $dest);
-            }
-        }
+        // Use shell commands for reliable file copying
+        $output = [];
         
-        // Remove extracted folder
-        rmdir($extractedFolder);
+        // Copy all files and folders (overwrite existing)
+        exec("cp -rf " . escapeshellarg($extractedFolder) . "* " . escapeshellarg($extractPath) . " 2>&1", $output, $returnCode);
+        logMessage("Copy output: " . implode("\n", $output));
+        
+        // Also copy hidden files (.env, .htaccess, etc)
+        exec("cp -rf " . escapeshellarg($extractedFolder) . ".* " . escapeshellarg($extractPath) . " 2>&1", $output2, $returnCode2);
+        logMessage("Hidden files copy: " . implode("\n", $output2));
+        
+        // Remove extracted folder recursively
+        exec("rm -rf " . escapeshellarg($extractedFolder) . " 2>&1", $output3, $returnCode3);
+        logMessage("Cleanup extracted folder: " . implode("\n", $output3));
+        
         logMessage("Files moved successfully");
+    } else {
+        logMessage("Warning: Extracted folder not found at $extractedFolder");
     }
     
     // Step 4: Cleanup
