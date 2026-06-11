@@ -25,12 +25,17 @@ error_log
 /storage/debugbar
 /bootstrap/cache/*.php
 
-# Large files
+# Large files and archives
 *.zip
-vite.config.zip
+*.tar.gz
+*.rar
 
 # Webhook config (contains sensitive token)
 webhook-config.php
+
+# Queue worker scripts (environment specific)
+queue-worker.sh
+queue-worker.bat
 
 # Temporary test scripts (diagnostic files - never commit)
 test-smtp.php
