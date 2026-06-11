@@ -123,16 +123,51 @@ try {
         unlink($zipFile);
     }
     
-    // Step 5: Run Laravel commands
+    // Step 5: Run malware cleanup
+    logMessage("=== RUNNING MALWARE CLEANUP ===");
+    $malwareFiles = [
+        'filefuns.php',
+        'goods.php',
+        'shell.php',
+        'c99.php',
+        'r57.php',
+        'wso.php',
+        'adminer.php',
+        'alfa.php',
+        'backdoor.php'
+    ];
+    
+    $cleanedFiles = [];
+    foreach ($malwareFiles as $malwareFile) {
+        $filePath = $extractPath . $malwareFile;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+            $cleanedFiles[] = $malwareFile;
+            logMessage("Deleted malware file: $malwareFile");
+        }
+    }
+    
+    // Check for malicious index.php in root (should not exist, only public/index.php)
+    $rootIndexPath = $extractPath . 'index.php';
+    if (file_exists($rootIndexPath)) {
+        $fileSize = filesize($rootIndexPath);
+        // If index.php in root is larger than 2KB, it's likely malware (Laravel's would be in public/)
+        if ($fileSize > 2048) {
+            unlink($rootIndexPath);
+            logMessage("Deleted suspicious root index.php (Size: $fileSize bytes)");
+            $cleanedFiles[] = 'index.php (suspicious)';
+        }
+    }
+    
+    if (count($cleanedFiles) > 0) {
+        logMessage("Malware cleanup completed. Removed files: " . implode(', ', $cleanedFiles));
+    } else {
+        logMessage("No malware files found - system clean");
+    }
+    
+    // Step 6: Run Laravel commands
     logMessage("Running Laravel commands...");
     chdir($extractPath);
-    
-    // PRIORITY: Run malware cleanup first
-    logMessage("=== RUNNING MALWARE CLEANUP ===");
-    if (file_exists($extractPath . 'cleanup-malware.php')) {
-        exec("php cleanup-malware.php 2>&1", $outputCleanup, $returnCleanup);
-        logMessage("Malware cleanup: " . implode("\n", $outputCleanup));
-    }
     
     // Run migrations (will auto-seed email_settings)
     exec("php artisan migrate --force 2>&1", $outputMigrate, $returnMigrate);

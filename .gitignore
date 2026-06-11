@@ -32,7 +32,7 @@ vite.config.zip
 # Webhook config (contains sensitive token)
 webhook-config.php
 
-# Temporary test scripts (diagnostic files needed for server debugging)
+# Temporary test scripts (diagnostic files - never commit)
 test-smtp.php
 check-logs.php
 clear-cache.php
@@ -41,10 +41,19 @@ SERVER-FIX-COMMANDS.txt
 info.php
 check-status.php
 fix-website.php
+check.php
+test-db.php
+status.php
+ping.php
+emergency-fix.php
+deploy-fix.php
+cleanup-malware.php
 DEPLOY.txt
 QUEUE-SETUP.md
 SERVER-ENV-UPDATE.md
 deployment.log
+*.md
+!README.md
 
 # MALWARE PATTERNS - BLOCK FROM GIT
 filefuns.php
