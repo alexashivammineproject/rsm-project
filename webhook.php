@@ -91,9 +91,22 @@ try {
         exec("cp -rf " . escapeshellarg($extractedFolder) . "* " . escapeshellarg($extractPath) . " 2>&1", $output, $returnCode);
         logMessage("Copy output: " . implode("\n", $output));
         
-        // Also copy hidden files (.env, .htaccess, etc)
-        exec("cp -rf " . escapeshellarg($extractedFolder) . ".* " . escapeshellarg($extractPath) . " 2>&1", $output2, $returnCode2);
-        logMessage("Hidden files copy: " . implode("\n", $output2));
+        // Also copy hidden files EXCEPT .env (don't overwrite database credentials)
+        $hiddenFiles = glob($extractedFolder . ".*");
+        foreach ($hiddenFiles as $hiddenFile) {
+            $basename = basename($hiddenFile);
+            // Skip . and .. and .env file
+            if ($basename === '.' || $basename === '..' || $basename === '.env') {
+                continue;
+            }
+            $destFile = $extractPath . $basename;
+            if (is_file($hiddenFile)) {
+                copy($hiddenFile, $destFile);
+            } elseif (is_dir($hiddenFile)) {
+                exec("cp -rf " . escapeshellarg($hiddenFile) . " " . escapeshellarg($destFile) . " 2>&1");
+            }
+        }
+        logMessage("Hidden files copied (skipped .env)");
         
         // Remove extracted folder recursively
         exec("rm -rf " . escapeshellarg($extractedFolder) . " 2>&1", $output3, $returnCode3);
