@@ -1,0 +1,46 @@
+User-agent: *
+
+Disallow: /checkout/
+
+# Allow AI and generative bots
+
+User-agent: ChatGPT
+Crawl-delay: 10
+Allow: /
+
+User-agent: GPTBot
+Crawl-delay: 10
+Allow: /
+
+User-agent: ChatGPT-User
+Crawl-delay: 10
+Allow: /
+
+User-agent: OAI-Search
+Crawl-delay: 10
+Allow: /
+
+User-agent: Bard
+Crawl-delay: 10
+Allow: /
+
+User-agent: Gemini
+Crawl-delay: 10
+Allow: /
+
+User-agent: OAI-SearchBot
+Crawl-delay: 10
+Allow: /
+
+User-agent: OpenAI
+Crawl-delay: 10
+Allow: /
+User-agent: GenerativeAI
+Crawl-delay: 10
+Allow: /
+
+User-agent: PredictiveAI
+Crawl-delay: 10
+Allow: /
+
+Sitemap: https://rsmmultilink.com/sitemap.xml
