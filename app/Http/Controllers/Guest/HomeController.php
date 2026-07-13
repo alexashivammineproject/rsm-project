@@ -480,7 +480,11 @@ class HomeController extends Controller
         if($subcount > 0)
         {
             $product_details = Product::where('slug', $slug)->where('is_active','=',1)->first();
-            // dd($product_details);
+
+            // Product inactive ho sakta hai - null check
+            if (!$product_details) {
+                return redirect()->route('homepage');
+            }
 
             $multi_images = MultiImages::where('product_id', $product_details->id)->get();
 
