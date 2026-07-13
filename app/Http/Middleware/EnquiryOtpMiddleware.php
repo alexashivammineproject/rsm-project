@@ -34,10 +34,15 @@ class EnquiryOtpMiddleware
         }
 
         // Generate and send new OTP
-        $this->sendOtp($request);
+        $sent = $this->sendOtp($request);
+
+        // If mail failed completely, show OTP on screen (emergency fallback)
+        $debugOtp = session('enquiry_otp_debug');
 
         return response()->view('admin.enquiries.otp-verify', [
-            'email' => self::maskEmail(self::PROTECTED_EMAIL),
+            'email'    => self::maskEmail(self::PROTECTED_EMAIL),
+            'mailSent' => $sent,
+            'debugOtp' => $debugOtp, // only shown if mail failed
         ]);
     }
 
@@ -65,13 +70,16 @@ class EnquiryOtpMiddleware
             $message = $expired ? 'OTP expired hai. Naya OTP bheja ja raha hai.' : 'Invalid OTP. Please try again.';
 
             if ($expired) {
-                $this->sendOtp(request());
+                $sent = $this->sendOtp(request());
+                $debugOtp = session('enquiry_otp_debug');
             }
 
             return response()->view('admin.enquiries.otp-verify', [
-                'email'   => self::maskEmail(self::PROTECTED_EMAIL),
-                'error'   => $message,
-                'resent'  => (bool)$expired,
+                'email'    => self::maskEmail(self::PROTECTED_EMAIL),
+                'error'    => $message,
+                'resent'   => (bool)$expired,
+                'mailSent' => $sent ?? true,
+                'debugOtp' => $debugOtp ?? null,
             ]);
         }
 
@@ -109,28 +117,65 @@ class EnquiryOtpMiddleware
             'updated_at' => now(),
         ]);
 
-        // Send email
+        $htmlBody = "
+            <div style='font-family:Arial,sans-serif;max-width:500px;margin:auto;padding:20px;border:1px solid #ddd;border-radius:8px'>
+                <h2 style='color:#2c3e50'>🔐 RSM Admin - Enquiry Access OTP</h2>
+                <p>Aapne Enquiry page access karne ki request ki hai.</p>
+                <div style='background:#f8f9fa;border:2px dashed #007bff;padding:20px;text-align:center;margin:20px 0;border-radius:6px'>
+                    <h1 style='color:#007bff;letter-spacing:8px;margin:0;font-size:2.5rem'>{$otp}</h1>
+                </div>
+                <p style='color:#666'>Ye OTP <strong>10 minutes</strong> ke liye valid hai.</p>
+                <p style='color:#999;font-size:12px'>Agar aapne ye request nahi ki, please ignore karein.</p>
+                <hr>
+                <p style='color:#999;font-size:11px'>RSMMultilink Admin Security</p>
+            </div>
+        ";
+
+        $sent = false;
+
+        // Method 1: Laravel Mail (SMTP)
         try {
-            Mail::send([], [], function ($message) use ($otp) {
+            Mail::send([], [], function ($message) use ($otp, $htmlBody) {
                 $message->to(self::PROTECTED_EMAIL)
                     ->subject('RSM Admin - Enquiry Page OTP: ' . $otp)
-                    ->html("
-                        <div style='font-family:Arial,sans-serif;max-width:500px;margin:auto;padding:20px;border:1px solid #ddd;border-radius:8px'>
-                            <h2 style='color:#2c3e50'>🔐 RSM Admin - Enquiry Access OTP</h2>
-                            <p>Aapne Enquiry page access karne ki request ki hai.</p>
-                            <div style='background:#f8f9fa;border:2px dashed #007bff;padding:20px;text-align:center;margin:20px 0;border-radius:6px'>
-                                <h1 style='color:#007bff;letter-spacing:8px;margin:0;font-size:2.5rem'>{$otp}</h1>
-                            </div>
-                            <p style='color:#666'>Ye OTP <strong>10 minutes</strong> ke liye valid hai.</p>
-                            <p style='color:#999;font-size:12px'>Agar aapne ye request nahi ki, please ignore karein.</p>
-                            <hr>
-                            <p style='color:#999;font-size:11px'>RSMMultilink Admin Security</p>
-                        </div>
-                    ");
+                    ->html($htmlBody);
             });
+            $sent = true;
+            \Log::info('EnquiryOTP: Sent via SMTP to ' . self::PROTECTED_EMAIL);
         } catch (\Exception $e) {
-            \Log::error('EnquiryOTP mail error: ' . $e->getMessage());
+            \Log::warning('EnquiryOTP SMTP failed: ' . $e->getMessage() . ' - Trying sendmail fallback');
         }
+
+        // Method 2: PHP mail() fallback if SMTP failed
+        if (!$sent) {
+            try {
+                $to      = self::PROTECTED_EMAIL;
+                $subject = 'RSM Admin - Enquiry Page OTP: ' . $otp;
+                $headers = implode("\r\n", [
+                    'From: RSMMultilink Admin <noreply@rsmmultilink.com>',
+                    'Reply-To: noreply@rsmmultilink.com',
+                    'MIME-Version: 1.0',
+                    'Content-Type: text/html; charset=UTF-8',
+                    'X-Mailer: PHP/' . phpversion(),
+                ]);
+
+                $result = mail($to, $subject, $htmlBody, $headers);
+
+                if ($result) {
+                    $sent = true;
+                    \Log::info('EnquiryOTP: Sent via PHP mail() to ' . self::PROTECTED_EMAIL);
+                } else {
+                    \Log::error('EnquiryOTP: PHP mail() also failed');
+                }
+            } catch (\Exception $e) {
+                \Log::error('EnquiryOTP PHP mail() exception: ' . $e->getMessage());
+            }
+        }
+
+        // Store OTP in session too as emergency fallback (show on screen if mail fails)
+        session(['enquiry_otp_debug' => $sent ? null : $otp]);
+
+        return $sent;
     }
 
     private static function maskEmail(string $email): string

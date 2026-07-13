@@ -30,7 +30,13 @@
                 </div>
             @endif
 
-            @if(isset($resent) && $resent)
+            @if(isset($debugOtp) && $debugOtp)
+                <div class="alert alert-warning text-center">
+                    ⚠️ Mail send nahi hui. Emergency OTP:
+                    <h2 class="mt-2" style="letter-spacing:8px;color:#dc3545"><strong>{{ $debugOtp }}</strong></h2>
+                    <small>Ye sirf tabhi dikhta hai jab mail fail ho</small>
+                </div>
+            @elseif(isset($resent) && $resent)
                 <div class="alert alert-info text-center">
                     ✉️ Naya OTP bheja gaya hai!
                 </div>
