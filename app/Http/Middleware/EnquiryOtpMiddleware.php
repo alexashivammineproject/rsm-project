@@ -33,8 +33,8 @@ class EnquiryOtpMiddleware
             return $next($request);
         }
 
-        // 2FA code submitted
-        if ($request->isMethod('post') && $request->has('enquiry_2fa_code')) {
+        // 2FA code submitted - GET or POST dono handle karo
+        if ($request->has('enquiry_2fa_code')) {
             return $this->verify2FA($request, $next, $user);
         }
 

@@ -38,7 +38,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('admin/enquiry') }}">
+                    <form method="POST" action="{{ route('enquiry.verify2fa') }}">
                         @csrf
                         <div class="form-group">
                             <label class="font-weight-bold text-dark">Authentication Code</label>
