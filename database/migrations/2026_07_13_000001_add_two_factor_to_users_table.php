@@ -9,7 +9,7 @@ class AddTwoFactorToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('two_factor_secret')->nullable()->after('password');
+            $table->text('two_factor_secret')->nullable()->after('password');
             $table->boolean('two_factor_enabled')->default(false)->after('two_factor_secret');
             $table->timestamp('two_factor_confirmed_at')->nullable()->after('two_factor_enabled');
         });
