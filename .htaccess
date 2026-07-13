@@ -1,7 +1,61 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Redirect to public folder if not already there
+
+    # Storage files direct serve karo
+    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+
+    # Baaki sab public/ me bhejo
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# ============================================================
+# SECURITY HARDENING
+# ============================================================
+
+# Block malware/shell files
+<FilesMatch "(shell|c99|r57|wso|alfa|chosen|simple|backdoor|adminer|filefuns|goods)\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block hidden files (.htpasswd, .git, etc) - but allow .htaccess and .well-known
+<FilesMatch "^\.(?!htaccess|well-known)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block sensitive files
+<FilesMatch "\.(sql|log|env|bak|backup|conf|ini|sh|bash)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block PHP in uploads/storage directories
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_URI} ^/storage/.*\.php$ [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# Block SQLi and XSS in query strings
+<IfModule mod_rewrite.c>
+    RewriteCond %{QUERY_STRING} (eval\(|union.*select|insert.*into|base64_decode|<script) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Block directory browsing
+Options -Indexes
+
+# Block WordPress/common attack paths
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_URI} ^/(wp-admin|wp-login|xmlrpc|phpmyadmin|pma) [NC]
+    RewriteRule .* - [F,L]
 </IfModule>
