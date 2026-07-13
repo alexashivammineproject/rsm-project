@@ -76,7 +76,11 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="/admin/upload-sitemap" >Sitemap</a>
+									<a class="dropdown-item" href="/admin/upload-sitemap">Sitemap</a>
+                                    <a class="dropdown-item" href="{{ route('2fa.setup') }}">
+                                        🔐 {{ Auth::user()->two_factor_enabled ? '✅ 2FA Active' : 'Setup 2FA' }}
+                                    </a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

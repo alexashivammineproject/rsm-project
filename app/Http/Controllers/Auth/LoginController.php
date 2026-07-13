@@ -6,65 +6,40 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
     protected $redirectTo = 'admin/dashboard';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
 
     /**
-     * Overriding: The user has been authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
-     * @return mixed
+     * After credentials are verified - check 2FA
      */
     public function authenticated(Request $request, $user)
     {
-			
-		//	\App\OTP::generateOTP($user);
-			
-		//	return redirect()->route('otp.verify');
-	
-		
+        // Check if account is active
         if ($user->is_active === 0) {
             auth()->logout();
-            return back();
-            // ->with(
-            //     'errors',
-            //     'You need to confirm your account. We have sent you an activation code, please check your email.'
-            // );
+            return back()->withErrors(['email' => 'Your account is not active.']);
         }
+
+        // Check if 2FA is enabled for this user
+        if ($user->two_factor_enabled && $user->two_factor_secret) {
+            // Log out temporarily, store user ID in session for 2FA step
+            Auth::logout();
+            session([
+                '2fa_user_id' => $user->id,
+                '2fa_remember' => $request->boolean('remember'),
+            ]);
+            return redirect()->route('2fa.verify');
+        }
+
         return redirect()->intended($this->redirectPath());
     }
-	
 }
-

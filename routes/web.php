@@ -52,7 +52,12 @@ Route::get('content/view/{pages}', 'Guest\HomeController@pages');
 Route::get('unauthorized', function () {
     return view('unauthorized');
 });
-// OTP routes removed - direct access with auth only
+// 2FA Routes
+Route::get('auth/two-factor', 'Auth\TwoFactorController@showVerifyForm')->name('2fa.verify');
+Route::post('auth/two-factor', 'Auth\TwoFactorController@verify')->name('2fa.verify.post');
+Route::get('auth/two-factor/setup', 'Auth\TwoFactorController@showSetup')->name('2fa.setup')->middleware('auth');
+Route::post('auth/two-factor/enable', 'Auth\TwoFactorController@enable')->name('2fa.enable')->middleware('auth');
+Route::delete('auth/two-factor/disable', 'Auth\TwoFactorController@disable')->name('2fa.disable')->middleware('auth');
 Route::resource('admin/enquiry', 'Admin\EnqueryController', ['except' => ['create', 'store' ]])->middleware('auth');
  
 // Admin Routes
