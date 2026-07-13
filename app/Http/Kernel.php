@@ -60,7 +60,7 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-		// 'otp' => \App\Http\Middleware\CheckOtp::class, // REMOVED - OTP system disabled
+        'enquiry.otp' => \App\Http\Middleware\EnquiryOtpMiddleware::class,
     ];
 
 }
