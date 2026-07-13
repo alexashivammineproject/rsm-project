@@ -10,7 +10,7 @@ class CreateTwoFactorSessionsTable extends Migration
     {
         Schema::create('two_factor_sessions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedInteger('user_id');
             $table->string('token', 64)->unique();
             $table->boolean('verified')->default(false);
             $table->timestamp('expires_at');
