@@ -57,12 +57,7 @@ class CustomMailServiceProvider extends ServiceProvider
                 ],
             ]);
             
-            \Log::info('Mail configured successfully', [
-                'host' => env('MAIL_HOST'),
-                'port' => env('MAIL_PORT'),
-                'username' => env('MAIL_USERNAME'),
-                'encryption' => env('MAIL_ENCRYPTION'),
-            ]);
+            // Log removed - was causing log spam on every request
         } catch (\Exception $e) {
             \Log::error('CustomMailServiceProvider error: ' . $e->getMessage());
         }

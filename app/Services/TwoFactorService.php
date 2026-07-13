@@ -72,22 +72,23 @@ class TwoFactorService
 
     /**
      * Generate QR code URL for Google Authenticator
+     * Uses a reliable QR API
      */
     public static function getQrCodeUrl(string $email, string $secret, string $issuer = 'RSMMultilink'): string
     {
         $label = rawurlencode($issuer . ':' . $email);
         $params = http_build_query([
-            'secret' => $secret,
-            'issuer' => $issuer,
+            'secret'    => $secret,
+            'issuer'    => $issuer,
             'algorithm' => 'SHA1',
-            'digits' => self::DIGITS,
-            'period' => self::PERIOD,
+            'digits'    => self::DIGITS,
+            'period'    => self::PERIOD,
         ]);
 
         $otpauth = "otpauth://totp/{$label}?{$params}";
 
-        // Use Google Charts API for QR code
-        return 'https://chart.googleapis.com/chart?chs=300x300&chld=M|0&cht=qr&chl=' . rawurlencode($otpauth);
+        // Use QR Server API (more reliable than Google Charts)
+        return 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' . rawurlencode($otpauth);
     }
 
     /**
