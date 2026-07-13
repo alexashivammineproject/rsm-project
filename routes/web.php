@@ -59,7 +59,7 @@ Route::get('auth/two-factor/setup', 'Auth\TwoFactorController@showSetup')->name(
 Route::post('auth/two-factor/enable', 'Auth\TwoFactorController@enable')->name('2fa.enable')->middleware('auth');
 Route::delete('auth/two-factor/disable', 'Auth\TwoFactorController@disable')->name('2fa.disable')->middleware('auth');
 
-// Enquiry routes - protected with Email OTP
+// Enquiry routes - protected with 2FA session check
 Route::get('admin/enquiry/resend-otp', function() {
     session()->forget(['enquiry_otp_verified', 'enquiry_otp_expiry']);
     return redirect()->route('enquiry.index');
