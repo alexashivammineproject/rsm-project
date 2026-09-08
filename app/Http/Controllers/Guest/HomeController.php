@@ -64,11 +64,10 @@ class HomeController extends Controller
             $mens_health = collect();
             if ($cat) {
                 $cat_id = $cat->id;
+                // Get specific hardcoded products for men's health display
                 $mens_health = DB::table('products')
-                        ->join('pcategory_product', 'products.id', '=', 'pcategory_product.product_id')
-                        ->select('products.*')
-                        ->where('pcategory_product.pcategory_id','=',$cat_id)
-                        ->where('products.is_active','=',1)
+                        ->where('is_active','=',1)
+                        ->whereIn('id', [5, 6, 8, 207])
                         ->take(4)->get();
             }
             
@@ -120,10 +119,8 @@ class HomeController extends Controller
 
         //$val = [5,6,8,207];
         $cat_list1 = DB::table('products')
-                ->join('pcategory_product', 'products.id', '=', 'pcategory_product.product_id')
-                ->select('products.*')
-                ->where('pcategory_product.pcategory_id','=',$cat_id)
-                ->where('products.is_active','=',1)
+                ->where('is_active','=',1)
+                ->whereIn('id', [5, 6, 8, 207])
                 ->get();
         
 
