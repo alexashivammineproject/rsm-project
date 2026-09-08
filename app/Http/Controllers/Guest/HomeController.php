@@ -67,11 +67,9 @@ class HomeController extends Controller
                 $mens_health = DB::table('products')
                         ->join('pcategory_product', 'products.id', '=', 'pcategory_product.product_id')
                         ->select('products.*')
-                        ->orWhere('products.id','=',5)
-                        ->orWhere('products.id','=',6)
-                        ->orWhere('products.id','=',8)
-                        ->orWhere('products.id','=',207)
-                        ->get();
+                        ->where('pcategory_product.pcategory_id','=',$cat_id)
+                        ->where('products.is_active','=',1)
+                        ->take(4)->get();
             }
             
             $blogs = Blog::where('is_active','=',1)->orderBy('id', 'DESC')->take(3)->get();
@@ -124,12 +122,8 @@ class HomeController extends Controller
         $cat_list1 = DB::table('products')
                 ->join('pcategory_product', 'products.id', '=', 'pcategory_product.product_id')
                 ->select('products.*')
-                //->where('pcategory_product.pcategory_id','=',$cat_id)
-                ->orWhere('products.id','=',5)
-                ->orWhere('products.id','=',6)
-                ->orWhere('products.id','=',8)
-                ->orWhere('products.id','=',207)
-                //->whereIn('products.id','=',$val)
+                ->where('pcategory_product.pcategory_id','=',$cat_id)
+                ->where('products.is_active','=',1)
                 ->get();
         
 

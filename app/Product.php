@@ -25,7 +25,8 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'slug', 'image', 'excerpt', 'description', 'views', 'user_id', 'is_active', 'allow_comments'
+        'title', 'slug', 'image', 'alt_img', 'excerpt', 'description', 'views', 'user_id', 'is_active', 'allow_comments', 
+        'meta_title', 'meta_keywords', 'meta_description', 'new_launches', 'hot_offers'
     ];
 
     public function sluggable(): array

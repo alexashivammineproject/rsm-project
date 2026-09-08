@@ -50,25 +50,26 @@
             </div>
             <div class="row">
             @foreach ($new_launches as $new) 
-			   @if(!empty($new->image))
-			   @php
-				  $image_name = $new->image;
-				  $name = explode(".",$new->image);
-				  $new_image_name = $new->image;
-				  $new_alt_img = $new->alt_img;
-				@endphp
-				@endif  
-			    <div class="col-lg-3 col-sm-6 col-xs-12">
+                <div class="col-lg-3 col-sm-6 col-xs-12">
                     <div class="prodcut-box">
-					@if($new->alt_img != NULL && $new->alt_img != '--' )
-                        <div class="product-image bcd"><a href="{{ url('') }}/{!! !empty($new->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $new->slug}}"><img src="{{asset('storage/images/'.$new_alt_img.'')}}" alt="new-launches" width="266" height="266" loading="lazy"></a></div>
-					@else
-                        <div class="product-image abc"><a href="{{ url('') }}/{!! !empty($new->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $new->slug}}"><img src="{{asset('storage/'.$new_image_name.'')}}" alt="new-launches" width="266" height="266" loading="lazy"></a></div>
-					@endif
-                        <div class="product-tittle"><a href="{{ url('') }}/{!! !empty($new->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $new->slug}}">{{ $new->title }}</a></div>
+                        <div class="product-image">
+                            <a href="{{ url('') }}/{!! !empty($new->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $new->slug }}">
+                                @php
+                                    $imgSrc = !empty($new->alt_img) && $new->alt_img !== '--' 
+                                        ? asset('storage/' . $new->alt_img) 
+                                        : asset('storage/' . $new->image);
+                                @endphp
+                                <img src="{{ $imgSrc }}" alt="{{ $new->title }}" width="266" height="266" loading="lazy">
+                            </a>
+                        </div>
+                        <div class="product-tittle">
+                            <a href="{{ url('') }}/{!! !empty($new->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $new->slug }}">
+                                {{ $new->title }}
+                            </a>
+                        </div>
                     </div>
                 </div>
-             @endforeach   
+            @endforeach   
             </div>
         </div>
     </section>
@@ -80,26 +81,26 @@
             </div>
             <div class="row">
                 @foreach ($hot_offers as $hot)
-				@if(!empty($hot->image))
-				   @php
-					  $image_name = $hot->image;
-					  $name = explode(".",$image_name);
-					  $hotnew_image_name = $image_name;
-					  $hot_alt_img = $hot->alt_img;
-					@endphp
-				@endif
-				<div class="col-lg-3 col-sm-6 col-xs-12">
-                    <div class="prodcut-box">
-					  @if($hot->alt_img != NULL && $hot->alt_img != '--' )
-                        <div class="product-image"><a href="{{ url('') }}/{!! !empty($hot->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $hot->slug}}"><img src="{{asset('storage/images/'.$hot_alt_img.'')}}" alt="hot-selling" width="266" height="266" loading="lazy"></a></div>
-					@else
-                        <div class="product-image"><a href="{{ url('') }}/{!! !empty($hot->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $hot->slug}}"><img src="{{asset('storage/'.$hotnew_image_name.'')}}" alt="hot-selling" width="266" height="266" loading="lazy"></a></div>
-					@endif
-                            <div class="product-tittle"><a href="{{ url('') }}/{!! !empty($hot->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $hot->slug}}">{{ $hot->title }}</a></div>
-                    
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="prodcut-box">
+                            <div class="product-image">
+                                <a href="{{ url('') }}/{!! !empty($hot->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $hot->slug }}">
+                                    @php
+                                        $imgSrc = !empty($hot->alt_img) && $hot->alt_img !== '--' 
+                                            ? asset('storage/' . $hot->alt_img) 
+                                            : asset('storage/' . $hot->image);
+                                    @endphp
+                                    <img src="{{ $imgSrc }}" alt="{{ $hot->title }}" width="266" height="266" loading="lazy">
+                                </a>
+                            </div>
+                            <div class="product-tittle">
+                                <a href="{{ url('') }}/{!! !empty($hot->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $hot->slug }}">
+                                    {{ $hot->title }}
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-           @endforeach    
+                @endforeach    
             </div>
         </div>
     </section>
