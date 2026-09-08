@@ -122,19 +122,15 @@
 						@endif
 						@if(!empty($mens->image))
 						   @php
-							  $image_name = $mens->image;
-							  $name = explode(".",$image_name);
-							  $hotnew_image_name = $name[0].".webp";
-							  $health_alt_img = $mens->alt_img;
 							  $cnt++;
 							@endphp
 						@endif
 						<div class="col-lg-3 col-sm-6 col-xs-12">  
 						<div class="prodcut-box">
 						@if($mens->alt_img != NULL && $mens->alt_img != '--' )
-							<div class="product-image"><a href="{{ url('') }}/{!! !empty($hot->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}"><img src="{{asset('storage/images/'.$health_alt_img.'')}}" alt="mens-health" width="266" height="266" loading="lazy"></a></div>
+							<div class="product-image"><a href="{{ url('') }}/{!! !empty($mens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}"><img src="{{asset('storage/'.$mens->alt_img)}}" alt="mens-health" width="266" height="266" loading="lazy"></a></div>
 						@else
-							<div class="product-image"><a href="{{ url('') }}/{!! !empty($hot->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}"><img src="{{asset('storage/'.$hotnew_image_name.'')}}" alt="mens-health" width="266" height="266" loading="lazy"></a></div>
+							<div class="product-image"><a href="{{ url('') }}/{!! !empty($mens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}"><img src="{{asset('storage/'.$mens->image)}}" alt="mens-health" width="266" height="266" loading="lazy"></a></div>
 						@endif
                             <div class="product-tittle"><a href="{{ url('') }}/{!! !empty($mens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}">{{ $mens->title }}</a></div>
 						</div>
@@ -156,19 +152,15 @@
 						@endif
 						@if(!empty($womens->image))
 						   @php
-							  $image_name = $womens->image;
-							  $name = explode(".",$image_name);
-							  $hotnew_image_name = $name[0].".webp";
-							  $health_alt_img = $womens->alt_img;
 							  $cnt++;
 							@endphp
 						@endif
 						<div class="col-lg-3 col-sm-6 col-xs-12">  
 						<div class="prodcut-box">
 						@if($womens->alt_img != NULL && $womens->alt_img != '--' )
-							<div class="product-image"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}"><img src="{{asset('storage/images/'.$health_alt_img.'')}}" alt="womens-health" width="266" height="266" loading="lazy"></a></div>
+							<div class="product-image"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}"><img src="{{asset('storage/'.$womens->alt_img)}}" alt="womens-health" width="266" height="266" loading="lazy"></a></div>
 						@else
-							<div class="product-image"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}"><img src="{{asset('storage/'.$hotnew_image_name.'')}}" alt="womens-health" width="266" height="266" loading="lazy"></a></div>
+							<div class="product-image"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}"><img src="{{asset('storage/'.$womens->image)}}" alt="womens-health" width="266" height="266" loading="lazy"></a></div>
 						@endif
                             <div class="product-tittle"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}">{{ $womens->title }}</a></div>
 						</div>
@@ -259,22 +251,12 @@
 					<div class="tab-pane" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">
 						<div class="row">
 							@foreach ($womens_health as $womens)
-								
-								@if(!empty($womens->image))
-								   @php
-									  $image_name = $womens->image;
-									  $name = explode(".",$image_name);
-									  $hotnew_image_name = $name[0].".webp";
-									  $health_alt_img = $womens->alt_img;
-									 
-									@endphp
-								@endif
 								<div class="col-lg-3 col-sm-6 col-xs-12">  
 								<div class="prodcut-box">
 									@if($womens->alt_img != NULL && $womens->alt_img != '--' )
-										<div class="product-image"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}"><img src="{{asset('storage/images/'.$health_alt_img.'')}}" alt="womens health" width="266" height="266" loading="lazy"></a></div>
+										<div class="product-image"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}"><img src="{{asset('storage/'.$womens->alt_img)}}" alt="womens health" width="266" height="266" loading="lazy"></a></div>
 									@else
-										<div class="product-image"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}"><img src="{{asset('storage/'.$hotnew_image_name.'')}}" alt="womens health" width="266" height="266" loading="lazy"></a></div>
+										<div class="product-image"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}"><img src="{{asset('storage/'.$womens->image)}}" alt="womens health" width="266" height="266" loading="lazy"></a></div>
 									@endif
 									<div class="product-tittle"><a href="{{ url('') }}/{!! !empty($womens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $womens->slug}}">{{ $womens->title }}</a></div>
 								</div>
@@ -285,22 +267,12 @@
 					<div class="tab-pane" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-2">
 						<div class="row">
 						@foreach ($mens_health as $mens)
-							
-							@if(!empty($mens->image))
-							   @php
-								  $image_name = $mens->image;
-								  $name = explode(".",$image_name);
-								  $hotnew_image_name = $name[0].".webp";
-								  $health_alt_img = $mens->alt_img;
-								  
-								@endphp
-							@endif
 							<div class="col-lg-3 col-sm-6 col-xs-12">  
 							<div class="prodcut-box">
 								@if($mens->alt_img != NULL && $mens->alt_img != '--' )
-									<div class="product-image"><a href="{{ url('') }}/{!! !empty($mens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}"><img src="{{asset('storage/images/'.$health_alt_img.'')}}" alt="Mens Health" width="266" height="266" loading="lazy"></a></div>
+									<div class="product-image"><a href="{{ url('') }}/{!! !empty($mens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}"><img src="{{asset('storage/'.$mens->alt_img)}}" alt="Mens Health" width="266" height="266" loading="lazy"></a></div>
 								@else
-									<div class="product-image"><a href="{{ url('') }}/{!! !empty($mens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}"><img src="{{asset('storage/'.$hotnew_image_name.'')}}" alt="Mens Health" width="266" height="266" loading="lazy"></a></div>
+									<div class="product-image"><a href="{{ url('') }}/{!! !empty($mens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}"><img src="{{asset('storage/'.$mens->image)}}" alt="Mens Health" width="266" height="266" loading="lazy"></a></div>
 								@endif
 								<div class="product-tittle"><a href="{{ url('') }}/{!! !empty($mens->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $mens->slug}}">{{ $mens->title }}</a></div>
 							</div>
