@@ -517,13 +517,15 @@ class HomeController extends Controller
 
     public function searchpage(Request $request)
     {
-        if($request->tags != '')
+        $searchQuery = $request->s ?? '';
+        
+        if(!empty($request->tags))
         {
-            $search = Product::orWhere('tags', 'like', '%' . $request->s . '%')->where('is_active','=',1)->paginate(8);
+            $search = Product::where('tags', 'like', '%' . $searchQuery . '%')->where('is_active','=',1)->paginate(8);
         }
         else
         {
-            $search = Product::orWhere('title', 'like', '%' . $request->s . '%')->where('is_active','=',1)->paginate(8);
+            $search = Product::where('title', 'like', '%' . $searchQuery . '%')->orWhere('excerpt', 'like', '%' . $searchQuery . '%')->where('is_active','=',1)->paginate(8);
         }
         return view('guest.searchpage',['search' => $search->appends(Input::except('page'))]);
     }
