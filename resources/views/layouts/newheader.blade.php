@@ -228,8 +228,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </div>
                     <div class="col-8 d-flex right-head align-items-center  justify-content-between">
                         <div class="search">
-                            <form class="form-inline my-lg-0" action="{{ url('/searchpage') }}" data-search-live="rd-search-results-live" method="GET">
-                                <input class="form-control mr-sm-2" type="search" value="{!! !empty($_GET['s']) ? $_GET['s'] : '' !!}" name="s" placeholder="Search" aria-label="Search" />
+                            <form class="form-inline my-lg-0" id="headerSearchForm" action="{{ url('/searchpage') }}" method="GET">
+                                <input class="form-control mr-sm-2" type="search" id="headerSearchInput" value="{!! !empty($_GET['s']) ? $_GET['s'] : '' !!}" name="s" placeholder="Search" aria-label="Search" />
                                 <button class="btn" type="submit" aria-label="Search Button">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M9.11115 16.2223C13.0385 16.2223 16.2223 13.0385 16.2223 9.11115C16.2223 5.18377 13.0385 2 9.11115 2C5.18377 2 2 5.18377 2 9.11115C2 13.0385 5.18377 16.2223 9.11115 16.2223Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
@@ -238,6 +238,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     </svg>
                                 </button>
                             </form>
+                            <div id="searchResults" class="search-results" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #ddd; max-height:300px; overflow-y:auto; z-index:1000; border-radius:4px;"></div>
                         </div>
                         <div class="header-contact-info">
                             <div class="phone-option">
@@ -402,8 +403,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                 </div>
                             </div>
                             <div class="search">
-                                <form class="form-inline my-lg-0" action="{{ url('/searchpage') }}" data-search-live="rd-search-results-live" method="GET">
-                                     <input class="form-control mr-sm-2" name="s" type="search" placeholder="Search" aria-label="Search" value="{!! !empty($_GET['s']) ? $_GET['s'] : '' !!}" />
+                                <form class="form-inline my-lg-0" id="mobileSearchForm" action="{{ url('/searchpage') }}" method="GET">
+                                     <input class="form-control mr-sm-2" id="mobileSearchInput" name="s" type="search" placeholder="Search" aria-label="Search" value="{!! !empty($_GET['s']) ? $_GET['s'] : '' !!}" />
                                     <button class="btn" type="submit"  aria-label="Search Button">
                                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M9.11115 16.2223C13.0385 16.2223 16.2223 13.0385 16.2223  9.11115C16.2223 5.18377 13.0385 2 9.11115 2C5.18377 2 2 5.18377 2 9.11115C2 13.0385 5.18377 16.2223 9.11115 16.2223Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
@@ -412,6 +413,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                         </svg>
                                     </button>
                                 </form>
+                                <div id="mobileSearchResults" class="search-results" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #ddd; max-height:300px; overflow-y:auto; z-index:1000; border-radius:4px;"></div>
                             </div>
                         </div>
                     </div>
@@ -731,6 +733,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             });
         });
     </script>
+    <script src="{{ asset('js/ajax-search.js') }}" defer></script>
         
 	</body>
 </html>

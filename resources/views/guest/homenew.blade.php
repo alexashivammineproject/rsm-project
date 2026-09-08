@@ -65,7 +65,7 @@
 					@else
                         <div class="product-image abc"><a href="{{ url('') }}/{!! !empty($new->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $new->slug}}"><img src="{{asset('storage/'.$new_image_name.'')}}" alt="new-launches" width="266" height="266" loading="lazy"></a></div>
 					@endif
-                        <div class="product-tittle"><a href="{{ url('') }}/{!! !empty($new->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $new->slug}}">{{ $new->title }} - shivam</a></div>
+                        <div class="product-tittle"><a href="{{ url('') }}/{!! !empty($new->name) ? 'product/catproducts' : 'product/viewdetail' !!}/{{ $new->slug}}">{{ $new->title }}</a></div>
                     </div>
                 </div>
              @endforeach   

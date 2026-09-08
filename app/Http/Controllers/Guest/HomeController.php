@@ -530,6 +530,27 @@ class HomeController extends Controller
         return view('guest.searchpage',['search' => $search->appends(Input::except('page'))]);
     }
 
+    /**
+     * AJAX Live Search
+     */
+    public function ajaxSearch(Request $request)
+    {
+        $query = $request->q ?? '';
+        
+        if(strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $results = Product::where('title', 'like', '%' . $query . '%')
+                          ->orWhere('excerpt', 'like', '%' . $query . '%')
+                          ->where('is_active', 1)
+                          ->select('id', 'title', 'slug', 'image', 'alt_img')
+                          ->limit(8)
+                          ->get();
+
+        return response()->json($results);
+    }
+
     public function thankYouPage(){
         return view('guest/thank-you');
     }

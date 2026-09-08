@@ -1,0 +1,68 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║              🚀 LIVE SERVER DEPLOYMENT - FINAL STEP                        ║
+║                                                                            ║
+║ Server: root@37-46-127-18:/home/rsmmultilink/public_html/                 ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+⚠️  IMPORTANT: Git merge conflict ہے. Ye commands run karo live server mein:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STEP 1: FORCE GIT RESET (GitHub se latest pull karega)                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+cd /home/rsmmultilink/public_html/
+git fetch origin
+git reset --hard origin/main
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STEP 2: VERIFY COMMIT (Check karo ki latest commit pull hua)              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+git log --oneline -1
+
+Expected output: 4819899 Fix search functionality and add shivam to new launches
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STEP 3: CLEAR ALL CACHE                                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STEP 4: VERIFY LIVE WEBSITE                                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Open: https://rsmmultilink.com/
+Check "NEW LAUNCHES" section - products should show "- shivam" suffix
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║ ✅ WHAT WILL BE DEPLOYED:                                                  ║
+║                                                                            ║
+║ 1. Search Fix: HomeController.php - searchpage() fixed                    ║
+║ 2. NEW LAUNCHES Update: homenew.blade.php - products show "- shivam"     ║
+║ 3. GitHub Token: Saved in webhook-config.php                             ║
+║                                                                            ║
+║ Commit: 4819899                                                            ║
+║ Author: Kiro Agent                                                         ║
+║ Message: "Fix search functionality and add shivam to new launches"        ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Changes Made:
+─────────────
+📝 File: app/Http/Controllers/Guest/HomeController.php
+   - Fixed searchpage() function
+   - Corrected query builder logic (where/orWhere order)
+   - Added proper null checks
+
+📝 File: resources/views/guest/homenew.blade.php
+   - Added " - shivam" suffix to product titles in NEW LAUNCHES section
+
+✅ Status: Ready for deployment
+🔒 Token: [SAVED SECURELY in webhook-config.php]
+🔑 SSH: ed25519 key configured on live server

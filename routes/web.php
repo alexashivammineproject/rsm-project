@@ -41,6 +41,7 @@ Route::get('product/categorylist', 'Guest\HomeController@categorylist');
 Route::get('product/catproducts/{slug}', 'Guest\HomeController@catgorylistshow');
 Route::get('product/viewdetail/{slug}', 'Guest\HomeController@productshow');
 Route::get('searchpage', 'Guest\HomeController@searchpage');
+Route::get('ajax/search', 'Guest\HomeController@ajaxSearch');
 Route::get('resizeImage', 'ImageController@resizeImage');
 Route::post('resizeImagePost',['as'=>'resizeImagePost','uses'=>'ImageController@resizeImagePost']);
 // User Area
