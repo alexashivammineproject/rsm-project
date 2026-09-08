@@ -10,7 +10,7 @@
     <link rel="canonical" href="{{ url()->full() }}" />
     <!-- SEO Title -->
 
-    @if (request()->route()->getName() == 'homepage')
+    @if (request()->route() && request()->route()->getName() == 'homepage')
 
         <title> Premium ED Products by RSM Multilink: Sildenafil,Tadalafil & Dapoxetine </title>
     @else
@@ -35,7 +35,7 @@
 <link rel="icon" type="image/x-icon" href="/imgs/favicon.ico">
     <!-- SEO Meta Descrition -->
 
-    @if (request()->route()->getName() == 'homepage')
+    @if (request()->route() && request()->route()->getName() == 'homepage')
         <meta name="description"
             content="Discover top-quality ED Products produced by RSM Multilink LLP.Explore our range of Sildenafil,Tadalafil,Vardenafil & Dapoxetine products & experience enhanced performance. Visit us now at rsmmultilink.com.">
     @else
@@ -48,7 +48,7 @@
     <meta name="keywords"
         content="@if (trim($__env->yieldContent('pageKeyword')) == '') Manufacturers & Exporter of ed products @else @yield('pageKeyword') @endif">
 
-    @if (request()->route()->getName() == 'homepage')
+    @if (request()->route() && request()->route()->getName() == 'homepage')
         <meta itemprop="name" content="RSM Multilink LLP Produced Sildenafil, Tadalafil & Dapoxetine Tablets">
         <meta itemprop="description"
             content=" RSM Multilink LLP Produced the ED products like sildenafil, Tadalafil, Vardenafil, Dapoxetine products like many more. Visit Us @rsmmultilink.com">
@@ -62,7 +62,7 @@
 
 
     <meta name="twitter:card" content="summary_large_image">
-    @if (request()->route()->getName() == 'homepage')
+    @if (request()->route() && request()->route()->getName() == 'homepage')
         <meta name="twitter:title" content="RSM Multilink LLP Produced Sildenafil, Tadalafil & Dapoxetine Tablets">
         <meta name="twitter:description"
             content="RSM Multilink LLP Produced the ED products like sildenafil, Tadalafil, Vardenafil, Dapoxetine products like many more. Visit Us @rsmmultilink.com">
@@ -72,7 +72,7 @@
     @endif
     <meta name="twitter:image:src" content="http://www.example.com/image.jpg">
 
-    @if (request()->route()->getName() == 'homepage')
+    @if (request()->route() && request()->route()->getName() == 'homepage')
         <meta property="og:title" content="RSM Multilink LLP Produced Sildenafil, Tadalafil & Dapoxetine Tablets" />
         <meta property="og:description"
             content="RSM Multilink LLP Produced the ED products like sildenafil, Tadalafil, Vardenafil, Dapoxetine products like many more. Visit Us @rsmmultilink.com" />
@@ -87,8 +87,7 @@
     <meta property="og:site_name" content="{{ app('global_settings')[0]['setting_value'] }}" />
 
     <meta name="google-site-verification" content="7SppIxuOHPzQLwEgzymK_a8otHxqN5HktlkwuQB6oK0" />
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4YHLRKGPXZ"></script>
+    <!-- Google tag (gtag.js) - Deferred to prevent blocking -->
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -98,13 +97,22 @@
         gtag('js', new Date());
 
         gtag('config', 'G-4YHLRKGPXZ');
+        
+        // Load GA asynchronously after page load
+        window.addEventListener('load', function() {
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-4YHLRKGPXZ';
+            document.head.appendChild(script);
+        });
     </script>
     <!--@if(request()->url() != 'https://rsmmultilink.com')
      {{-- recaptcha loaded per-page --}} 
     @endif -->
         <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
-        <!-- FontAwesome CDN Backup -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- FontAwesome CDN Backup with timeout fallback -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'" />
+        <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" /></noscript>
 		<link rel="stylesheet" href="{{ asset('css2/style.css') }}">
 		<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" >
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -190,12 +198,17 @@
          }
     </style>
     
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-M5VVXQD4');</script>
+<!-- Google Tag Manager - Deferred to prevent blocking -->
+<script>
+// Defer GTM loading until after page load
+window.addEventListener('load', function() {
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M5VVXQD4');
+});
+</script>
 <!-- End Google Tag Manager -->
 	<body>
 	    <!-- Google Tag Manager (noscript) -->
@@ -488,7 +501,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         
     </script>
 
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+    <script type="text/javascript">
+        // Load Google Translate after page load to avoid blocking
+        window.addEventListener('load', function() {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            script.defer = true;
+            document.head.appendChild(script);
+        });
+    </script>
    <script>
     window.addEventListener('load', function () {
         setTimeout(function () {

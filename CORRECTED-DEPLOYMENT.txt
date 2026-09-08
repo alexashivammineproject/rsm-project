@@ -1,0 +1,82 @@
+🚀 CORRECTED DEPLOYMENT - WEBSITE FIX
+
+The previous deployment was broken because the men's health query was using the category incorrectly.
+
+I've fixed the code. Now run this on the LIVE SERVER:
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OPTION 1: QUICK RESTORE TO SAFE STATE (if website still down)
+
+cd /home/rsmmultilink/public_html && git reset --hard 87af9db && php artisan cache:clear && php artisan config:clear && php artisan view:clear && echo "✅ WEBSITE RESTORED"
+
+(This gets you back to working state immediately)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OPTION 2: DEPLOY CORRECTED CODE (once website is back up)
+
+cd /home/rsmmultilink/public_html && git fetch origin && git reset --hard 8443f88 && php artisan migrate --force && php artisan cache:clear && php artisan config:clear && php artisan view:clear && echo "✅ CORRECTED DEPLOYMENT COMPLETE"
+
+(This deploys the fixed code)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+WHAT WAS WRONG:
+
+The original code for men's health display was:
+- Fetch category (but don't use it - it's commented out)
+- Return specific hardcoded products: 5, 6, 8, 207
+
+My previous fix BROKE this by:
+- Removing the hardcoded IDs
+- Using the category to filter (which was wrong)
+- Products 5, 6, 8, 207 might not be in that category
+
+CORRECTED FIX:
+
+Now it uses:
+- whereIn([5, 6, 8, 207]) to get exact products needed
+- is_active = 1 to ensure products are active
+- No unnecessary join
+- Much faster query
+
+═══════════════════════════════════════════════════════════════════════════════
+
+COMMITS:
+
+✅ 8443f88 - CORRECTED (Current - use this)
+   Fix: Correct mens_health query to use hardcoded IDs
+
+❌ a7bc5bd - BROKEN (Previous - caused the crash)
+   Production fix: Fix homepage query N+1 bug
+
+✅ 87af9db - SAFE FALLBACK (If above fails)
+   Fix: Replace deprecated Input facade
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP BY STEP:
+
+Step 1: If website is still down, run OPTION 1 first to restore
+
+Step 2: Once website is back online, run OPTION 2 to deploy corrected code
+
+Step 3: Test website works:
+   curl https://rsmmultilink.com/ | head -20
+
+Step 4: Check logs:
+   tail /home/rsmmultilink/public_html/storage/logs/laravel.log
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DO THIS NOW!
+
+First: Option 1 (restore)
+Then: Option 2 (deploy fix)
+
+Both commands together (if you want to do it in one go):
+
+cd /home/rsmmultilink/public_html && git reset --hard 87af9db && php artisan cache:clear && git fetch origin && git reset --hard 8443f88 && php artisan migrate --force && php artisan cache:clear && php artisan config:clear && php artisan view:clear && echo "✅ CORRECTED DEPLOYMENT COMPLETE"
+
+═══════════════════════════════════════════════════════════════════════════════

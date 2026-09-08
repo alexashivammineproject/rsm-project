@@ -1,0 +1,36 @@
+🚨 EMERGENCY ROLLBACK - WEBSITE DOWN 🚨
+
+COPY AND PASTE THIS ON THE LIVE SERVER TERMINAL IMMEDIATELY:
+
+═══════════════════════════════════════════════════════════════════════════════
+
+cd /home/rsmmultilink/public_html && git reset --hard 87af9db && php artisan cache:clear && php artisan config:clear && php artisan view:clear && echo "✅ WEBSITE RESTORED"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+THAT'S IT!
+
+Website will be back online in 10 seconds.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+WHAT HAPPENED:
+
+✅ WORKING: Commit 87af9db (before my fixes)
+❌ BROKEN: Commit a7bc5bd (after my fixes)
+
+The rollback command above reverts to 87af9db to restore the working website.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+AFTER WEBSITE IS BACK:
+
+Tell me:
+1. Website is now working? (yes/no)
+2. What error message did you see? (if any)
+3. Send me the logs:
+   tail -50 /home/rsmmultilink/public_html/storage/logs/laravel.log
+
+Then I will fix the broken code properly.
+
+═══════════════════════════════════════════════════════════════════════════════
