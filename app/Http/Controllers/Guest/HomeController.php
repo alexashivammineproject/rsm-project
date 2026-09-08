@@ -519,33 +519,41 @@ class HomeController extends Controller
     {
         $searchQuery = $request->s ?? '';
         
-        if(!empty($request->tags))
-        {
-            $search = Product::where('tags', 'like', '%' . $searchQuery . '%')->where('is_active','=',1)->paginate(8);
+        if(empty($searchQuery)) {
+            return view('guest.searchpage', ['search' => collect([])]);
         }
-        else
-        {
-            $search = Product::where('title', 'like', '%' . $searchQuery . '%')->orWhere('excerpt', 'like', '%' . $searchQuery . '%')->where('is_active','=',1)->paginate(8);
-        }
-        return view('guest.searchpage',['search' => $search->appends(Input::except('page'))]);
+
+        $search = Product::where('is_active', 1)
+                        ->where(function($query) use ($searchQuery) {
+                            $query->where('title', 'like', '%' . $searchQuery . '%')
+                                  ->orWhere('excerpt', 'like', '%' . $searchQuery . '%')
+                                  ->orWhere('tags', 'like', '%' . $searchQuery . '%');
+                        })
+                        ->paginate(8);
+        
+        return view('guest.searchpage', ['search' => $search->appends(Input::except('page'))]);
     }
 
     /**
-     * AJAX Live Search
+     * AJAX Live Search - Returns product results as JSON
      */
     public function ajaxSearch(Request $request)
     {
-        $query = $request->q ?? '';
+        $query = trim($request->input('q', ''));
         
-        if(strlen($query) < 2) {
+        // Minimum 1 character to search
+        if(strlen($query) < 1) {
             return response()->json([]);
         }
 
-        $results = Product::where('title', 'like', '%' . $query . '%')
-                          ->orWhere('excerpt', 'like', '%' . $query . '%')
-                          ->where('is_active', 1)
+        $results = Product::where('is_active', 1)
+                          ->where(function($q) use ($query) {
+                              $q->where('title', 'like', '%' . $query . '%')
+                                ->orWhere('excerpt', 'like', '%' . $query . '%')
+                                ->orWhere('tags', 'like', '%' . $query . '%');
+                          })
                           ->select('id', 'title', 'slug', 'image', 'alt_img')
-                          ->limit(8)
+                          ->limit(10)
                           ->get();
 
         return response()->json($results);
