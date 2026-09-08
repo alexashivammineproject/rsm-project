@@ -531,7 +531,7 @@ class HomeController extends Controller
                         })
                         ->paginate(8);
         
-        return view('guest.searchpage', ['search' => $search->appends(Input::except('page'))]);
+        return view('guest.searchpage', ['search' => $search->appends($request->except('page'))]);
     }
 
     /**
