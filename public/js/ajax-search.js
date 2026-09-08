@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let html = '';
         results.forEach(product => {
-            const image = product.alt_img ? '/storage/images/' + product.alt_img : '/storage/' + product.image;
+            const image = '/storage/' + product.image;
             const title = product.title || 'Unknown Product';
             const slug = product.slug || '#';
             

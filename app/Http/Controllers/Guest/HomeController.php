@@ -552,7 +552,7 @@ class HomeController extends Controller
                                 ->orWhere('excerpt', 'like', '%' . $query . '%')
                                 ->orWhere('tags', 'like', '%' . $query . '%');
                           })
-                          ->select('id', 'title', 'slug', 'image', 'alt_img')
+                          ->select('id', 'title', 'slug', 'image')
                           ->limit(10)
                           ->get();
 
